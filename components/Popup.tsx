@@ -12,14 +12,14 @@ export default function Popup({
   data: { image: string; link: string };
 }) {
   if (!isvisible) return null;
-  let url = useRef(null);
+  let url = useRef<HTMLInputElement>(null);
   const [wait, setwait] = useState<boolean>(false);
 
   const send = async () => {
     console.log(url.current?.value);
 
     setwait(true);
-    if (url.current?.value) {
+    if (url.current?.value?) {
       try {
         const response = await axios.post(
           "/urlhere",
