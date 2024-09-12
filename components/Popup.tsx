@@ -2,14 +2,24 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import axios from "axios";
 import "@/app/globals.css";
-export default function Popup({ isvisible, onclose, data }) {
+export default function Popup({
+  isvisible,
+  onclose,
+  data,
+}: {
+  isvisible: boolean;
+  onclose: () => void;
+  data: { image: string; link: string };
+}) {
   if (!isvisible) return null;
-  const [wait, setwait] = useState(false);
-  const url = useRef("null");
+  let url = useRef(null);
+  const [wait, setwait] = useState<boolean>(false);
+
   const send = async () => {
-    // console.log(url");
+    console.log(url.current?.value);
+
     setwait(true);
-    if (url.current !== "null") {
+    if (url.current?.value) {
       try {
         const response = await axios.post(
           "/urlhere",
@@ -61,14 +71,15 @@ export default function Popup({ isvisible, onclose, data }) {
               <div className="flex justify-center items-center">
                 <input
                   type="text"
+                  ref={url}
                   placeholder={` ${data.link}`}
-                  onChange={(e) => (url.current = e.target.value)}
                   className="text-black placeholder:text-black w-[80%] h-[50px] m-1 rounded-lg placeholder:ms-2"
                 />
+
                 <button
                   className="relative inline-flex h-12 active:scale-95 transistion overflow-hidden rounded-lg p-[1px] focus:outline-none m-1"
-                  onClick={() => send()}
                   disabled={wait}
+                  onClick={() => send()}
                 >
                   <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#e7029a_0%,#f472b6_50%,#bd5fff_100%)]"></span>
                   <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-slate-950 px-7 text-sm font-medium text-white backdrop-blur-3xl gap-2 undefined">
